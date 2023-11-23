@@ -1,6 +1,6 @@
 # FiltroFinal-SantiagoGonzalez
-## 1. Devuelve el listado de clientes indicando el nombre del cliente y cuántos
-pedidos ha realizado
+## 1. Devuelve el listado de clientes indicando el nombre del cliente y cuántos pedidos ha realizado
+- Falta
 
 ## 2. Devuelve un listado con el código de pedido, código de cliente, fecha
 esperada y fecha de entrega de los pedidos que no han sido entregados a
@@ -57,20 +57,16 @@ tiempo.
 - Para esta consulta, realicé pasos parecidos al anterior, ya que en mi entidad Productos, verifiqué por medio de la tabla DetallePedidos, si existía alguna orden con ese producto. Si es así me retorna todos los productos y luego creo una nueva instancia que me dará la información que requiero.
 
 
-// 4. Devuelve las oficinas donde no trabajan ninguno de los empleados que
-// hayan sido los representantes de ventas de algún cliente que haya realizado
-// la compra de algún producto de la gama Frutales.
+## 4. Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales.
         [HttpGet("GetOfficesWithEmployeeinGammaFrutales")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<ActionResult<string>> GetOfficesWithEmployeeinGammaFrutales()
+        public async Task<ActionResult<object>> GetOfficesWithEmployeeinGammaFrutales()
         {
-
             var results = await _context.Oficinas
-    .Where(o => !o.Empleados.Any(e => e.Clientes.Any(c => c.Pedidos.Any(p => p.DetallePedidos.Any(dp => dp.CodigoProductoNavigation.GamaNavigation.Id == "Frutales")))))
-    .ToListAsync();
-
+                .Where(o => !o.Empleados.Any(e => e.Clientes.Any(c => c.Pedidos.Any(p => p.DetallePedidos.Any(dp => dp.CodigoProductoNavigation.GamaNavigation.Id == "Frutales")))))
+                .ToListAsync();
 
             if (results == null)
             {
@@ -79,12 +75,15 @@ tiempo.
             return Ok(results);
         }
 
+- Para esta consulta, utilicé el método de extension Where para poder localizar el nombre del Producto Gama, para esto tuve que ir saltando de tabla en tabla, 
+realizándolo con métodos de flecha señalando al atributo tipo Entidad, para finalmente llegar a ProductoGama y sustraer el Id que coincida con "Frutales"
+
 // 6. Devuelve un listado con el nombre, apellidos y puesto de aquellos empleados que no sean representantes de ventas.
         [HttpGet("NotSellsRepresentEmployee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         
-        public async Task<ActionResult<string>> NotSellsRepresentEmployee()
+        public async Task<ActionResult<object>> NotSellsRepresentEmployee()
         {
         var results = await _context.Empleados
         .Where(e => e.Puesto != "Representante Ventas")
@@ -99,10 +98,11 @@ tiempo.
             return Ok(results);
         }
 
+- Para esta consulta lo que realicé fue dentro de mi misma entidad hallar los valores que necesitaba, en este caso, tuve que verificar si el Puesto del empleado era "Representante de ventas", no seleccionarlo para mi nueva instancia.
+
 // 8. Devuelve un listado de los 20 productos más vendidos y el número total de
 unidades que se han vendido de cada uno. El listado deberá estar ordenado
 por el número total de unidades vendidas.
-
 
         [HttpGet("GetTop20MostSellerProducts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -127,12 +127,14 @@ por el número total de unidades vendidas.
             return Ok(results);
         }
 
+- Para esta consulta, maneje 2 tablas, la primera fue Producto, en esta a través del método OrderByDescending, ordené la entidad y selecioné de esta los productos que en la segunda tabla DetallePedidos me brindaba la cantidad del producto vendida.
+
 // 10. Devuelve un listado de las diferentes gamas de producto que ha comprado cada cliente.
             [HttpGet("CustomersGammas")]
             [ProducesResponseType(StatusCodes.Status200OK)]
             [ProducesResponseType(StatusCodes.Status404NotFound)]
     
-            public async Task<ActionResult<string>> CustomersGammas()
+            public async Task<ActionResult<object>> CustomersGammas()
             {
     var results = await _context.Clientes
         .Join(_context.Pedidos,
@@ -164,3 +166,4 @@ por el número total de unidades vendidas.
     
                 return Ok(results);
             }
+- Para este insert tuve que usar un código mas complejo, el cual se distribuye en usar tres Join, para finalmente agruparlos todos en una nueva instancia que será la que finalmente muestre en el endpoint la infomracion que guardé
