@@ -78,7 +78,7 @@ tiempo.
 - Para esta consulta, utilicé el método de extension Where para poder localizar el nombre del Producto Gama, para esto tuve que ir saltando de tabla en tabla, 
 realizándolo con métodos de flecha señalando al atributo tipo Entidad, para finalmente llegar a ProductoGama y sustraer el Id que coincida con "Frutales"
 
-// 6. Devuelve un listado con el nombre, apellidos y puesto de aquellos empleados que no sean representantes de ventas.
+## 6. Devuelve un listado con el nombre, apellidos y puesto de aquellos empleados que no sean representantes de ventas.
         [HttpGet("NotSellsRepresentEmployee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -100,7 +100,7 @@ realizándolo con métodos de flecha señalando al atributo tipo Entidad, para f
 
 - Para esta consulta lo que realicé fue dentro de mi misma entidad hallar los valores que necesitaba, en este caso, tuve que verificar si el Puesto del empleado era "Representante de ventas", no seleccionarlo para mi nueva instancia.
 
-// 8. Devuelve un listado de los 20 productos más vendidos y el número total de
+## 8. Devuelve un listado de los 20 productos más vendidos y el número total de
 unidades que se han vendido de cada uno. El listado deberá estar ordenado
 por el número total de unidades vendidas.
 
@@ -129,7 +129,7 @@ por el número total de unidades vendidas.
 
 - Para esta consulta, maneje 2 tablas, la primera fue Producto, en esta a través del método OrderByDescending, ordené la entidad y selecioné de esta los productos que en la segunda tabla DetallePedidos me brindaba la cantidad del producto vendida.
 
-// 10. Devuelve un listado de las diferentes gamas de producto que ha comprado cada cliente.
+## 10. Devuelve un listado de las diferentes gamas de producto que ha comprado cada cliente.
             [HttpGet("CustomersGammas")]
             [ProducesResponseType(StatusCodes.Status200OK)]
             [ProducesResponseType(StatusCodes.Status404NotFound)]
